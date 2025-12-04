@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Funtasy House Trick Art Booking</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .time-slot.selected {
+      background-color: #15803d; /* green-700 */
+      color: white;
+      border-color: #15803d;
+    }
+  </style>
+</head>
+<body class="bg-stone-50 min-h-screen py-8 px-4 font-sans">
+  <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden">
+    
+    <div class="bg-green-800 p-6 text-white flex justify-between items-center">
+      <h1 class="text-2xl font-bold tracking-wide" data-i18n="pageTitle">Funtasy House Trick Art Booking</h1>
+      <select id="lang" onchange="changeLanguage()" class="bg-green-900 text-white border border-green-700 rounded px-3 py-1 text-sm focus:outline-none">
+        <option value="en">English</option>
+        <option value="ms">Bahasa Melayu</option>
+        <option value="zh">中文</option>
+      </select>
+    </div>
+
+    <form id="bookingForm" class="p-8 space-y-8" enctype="multipart/form-data">
+
+      <section>
+        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center">
+          <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded mr-2">1</span> 
+          <span data-i18n="visitInfo">Visitation Details</span>
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-semibold text-gray-600 mb-2" data-i18n="selectDate">Select Date</label>
+            <input type="date" id="visitDate" name="visitDate" class="w-full border-2 border-gray-200 rounded-xl p-3 focus:border-green-600 focus:outline-none transition-colors" required>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-600 mb-2" data-i18n="selectTime">Select Time Slot</label>
+            <div id="timeSlotsContainer" class="grid grid-cols-3 gap-2">
+              <div class="text-sm text-gray-400 italic col-span-3" data-i18n="selectDateFirst">Please select a date first.</div>
+            </div>
+            <input type="hidden" id="selectedTime" name="selectedTime" required>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center">
+          <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded mr-2">2</span> 
+          <span data-i18n="contactInfo">Contact Information</span>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input name="organizer" data-i18n-placeholder="organizer" placeholder="School/University Name" class="border p-3 rounded-lg w-full bg-gray-50" required>
+          <input name="contactPerson" data-i18n-placeholder="contactPerson" placeholder="Contact Person Name" class="border p-3 rounded-lg w-full bg-gray-50" required>
+          <input name="phone" data-i18n-placeholder="phone" placeholder="Phone Number" class="border p-3 rounded-lg w-full bg-gray-50" required>
+          <input name="email" data-i18n-placeholder="email" type="email" placeholder="Email Address" class="border p-3 rounded-lg w-full bg-gray-50" required>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center">
+          <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded mr-2">3</span> 
+          <span data-i18n="groupComp">Group Composition</span>
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          
+          <div class="bg-blue-50 p-5 rounded-xl border border-blue-100">
+            <h3 class="font-bold text-blue-800 mb-4 flex items-center">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+              <span data-i18n="mykadTitle">MyKad Holder</span>
+            </h3>
+            <div class="space-y-3">
+              <div>
+                <label class="text-xs font-semibold text-blue-900 block mb-1" data-i18n="adultPriceMy">Adult (RM15)</label>
+                <input name="adult_my" type="number" min="0" class="w-full border p-2 rounded" placeholder="0">
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-blue-900 block mb-1" data-i18n="child1to5PriceMy">Child 1-5y (RM10)</label>
+                <input name="child_my_1to5" type="number" min="0" class="w-full border p-2 rounded" placeholder="0">
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-blue-900 block mb-1" data-i18n="childAbove5PriceMy">Child >5y (RM15)</label>
+                <input name="child_my_above5" type="number" min="0" class="w-full border p-2 rounded" placeholder="0">
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-blue-900 block mb-1" data-i18n="okuPriceMy">OKU (RM10)</label>
+                <input name="oku_my" type="number" min="0" class="w-full border p-2 rounded" placeholder="0">
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-orange-50 p-5 rounded-xl border border-orange-100">
+            <h3 class="font-bold text-orange-800 mb-4 flex items-center">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"></path></svg>
+              <span data-i18n="nonMykadTitle">Non-MyKad Holder</span>
+            </h3>
+            <div class="space-y-3">
+              <div>
+                <label class="text-xs font-semibold text-orange-900 block mb-1" data-i18n="adultPriceF">Adult (RM25)</label>
+                <input name="adult_foreign" type="number" min="0" class="w-full border p-2 rounded " placeholder="0">
+              </div>
+                <div>
+                <label class="text-xs font-semibold text-orange-900 block mb-1" data-i18n="child1to5PriceF">Child 1-5y (RM20)</label>
+                <input name="child_foreign_1to5" type="number" min="0" class="w-full border p-2 rounded" placeholder="0">
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-orange-900 block mb-1" data-i18n="childAbove5PriceF">Child >5y (RM25)</label>
+                <input name="child_foreign_above5" type="number" min="0" class="w-full border p-2 rounded" placeholder="0">
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-orange-900 block mb-1" data-i18n="okuPriceF">OKU (RM20)</label>
+                <input name="oku_foreign" type="number" min="0" class="w-full border p-2 rounded" placeholder="0">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center">
+          <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded mr-2">4</span> 
+          <span data-i18n="verifyTitle">Supporting Documents</span>
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-4 border rounded bg-gray-50">
+            <label class="block font-semibold mb-2" data-i18n="tourGuide">Tour Guides</label>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-sm text-gray-500" data-i18n="count">Count:</span>
+              <input name="guide_count" type="number" min="0" class="border p-1 rounded w-20" placeholder="0">
+            </div>
+            <label class="block text-xs text-gray-500 mb-1" data-i18n="uploadLicense">Upload License (Image/PDF)</label>
+            <input type="file" name="guide_file" accept=".jpg,.jpeg,.png,.pdf" class="text-sm w-full">
+          </div>
+
+          <div class="p-4 border rounded bg-gray-50">
+            <label class="block font-semibold mb-2" data-i18n="okuCard">OKU / Disability Card</label>
+            <p class="text-xs text-gray-500 mb-2" data-i18n="okuHint">Please upload proof if you selected OKU tickets above.</p>
+            <label class="block text-xs text-gray-500 mb-1" data-i18n="uploadOku">Upload OKU Card (Image/PDF)</label>
+            <input type="file" name="oku_file" accept=".jpg,.jpeg,.png,.pdf" class="text-sm w-full">
+          </div>
+        </div>
+      </section>
+
+      <div id="priceSummary" class="bg-green-50 p-4 rounded-lg border border-green-200 hidden">
+        <h3 class="text-sm font-bold text-green-900 uppercase mb-2" data-i18n="estimatedPrice">Estimated Price</h3>
+        <div id="breakdownList" class="text-sm text-gray-700 space-y-1 mb-3"></div>
+        <div class="text-right text-2xl font-bold text-green-800">
+          <span data-i18n="total">Total:</span> <span id="totalRM">RM0.00</span>
+        </div>
+      </div>
+      
+      <input type="hidden" name="total_amount" id="total_amount" value="0">
+      <input type="hidden" name="price_breakdown" id="price_breakdown" value="">
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-600 mb-2" data-i18n="remarks">Remarks</label>
+        <textarea name="remark" data-i18n-placeholder="remarkPlace" class="w-full border p-3 rounded-lg" rows="3" placeholder="Any additional requests?"></textarea>
+      </div>
+
+      <button type="submit" class="w-full bg-green-700 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-green-800 transition transform hover:-translate-y-1">
+        <span data-i18n="confirmBtn">CONFIRM BOOKING</span>
+      </button>
+
+      <div id="resultMsg" class="hidden text-center p-4 rounded-lg font-semibold"></div>
+    </form>
+  </div>
+
+  <script>
+    // --- 1. LANGUAGE LOGIC ---
+    const translations = {
+      en: {
+        pageTitle: "Funtasy House Trick Art Booking",
+        visitInfo: "Visitation Details",
+        selectDate: "Select Date",
+        selectTime: "Select Time Slot",
+        selectDateFirst: "Please select a date first.",
+        contactInfo: "Contact Information",
+        organizer: "Organizer / Group Name",
+        contactPerson: "Contact Person Name",
+        phone: "Phone Number",
+        email: "Email Address",
+        groupComp: "Group Composition",
+        mykadTitle: "MyKad Holder",
+        nonMykadTitle: "Non-MyKad Holder",
+        adultPriceMy: "Adult (RM15)",
+        child1to5PriceMy: "Child 1-5y (RM10)",
+        childAbove5PriceMy: "Child >5y (RM15)",
+        okuPriceMy: "OKU (RM10)",
+        adultPriceF: "Adult (RM25)",
+        child1to5PriceF: "Child 1-5y (RM20)",
+        childAbove5PriceF: "Child >5y (RM25)",
+        okuPriceF: "OKU (RM20)",
+        verifyTitle: "Supporting Documents",
+        tourGuide: "Tour Guides",
+        count: "Count:",
+        uploadLicense: "Upload License (Image/PDF)",
+        okuCard: "OKU / Disability Card",
+        okuHint: "Please upload proof if you selected OKU tickets above.",
+        uploadOku: "Upload OKU Card (Image/PDF)",
+        estimatedPrice: "Estimated Price",
+        total: "Total:",
+        remarks: "Remarks",
+        remarkPlace: "Any additional requests?",
+        confirmBtn: "CONFIRM BOOKING"
+      },
+      ms: {
+        pageTitle: "Tempahan Funtasy House Trick Art",
+        visitInfo: "Butiran Lawatan",
+        selectDate: "Pilih Tarikh",
+        selectTime: "Pilih Slot Masa",
+        selectDateFirst: "Sila pilih tarikh dahulu.",
+        contactInfo: "Maklumat Hubungan",
+        organizer: "Penganjur / Nama Kumpulan",
+        contactPerson: "Nama Orang Dihubungi",
+        phone: "Nombor Telefon",
+        email: "Alamat E-mel",
+        groupComp: "Komposisi Kumpulan",
+        mykadTitle: "Pemegang MyKad",
+        nonMykadTitle: "Bukan Pemegang MyKad",
+        adultPriceMy: "Dewasa (RM15)",
+        child1to5PriceMy: "Kanak-kanak 1-5thn (RM10)",
+        childAbove5PriceMy: "Kanak-kanak >5thn (RM15)",
+        okuPriceMy: "OKU (RM10)",
+        adultPriceF: "Dewasa (RM25)",
+        child1to5PriceF: "Kanak-kanak 1-5thn (RM20)",
+        childAbove5PriceF: "Kanak-kanak >5thn (RM25)",
+        okuPriceF: "OKU (RM20)",
+        verifyTitle: "Dokumen Sokongan",
+        tourGuide: "Pemandu Pelancong",
+        count: "Bilangan:",
+        uploadLicense: "Muat Naik Lesen (Imej/PDF)",
+        okuCard: "Kad OKU",
+        okuHint: "Sila muat naik bukti jika memilih tiket OKU.",
+        uploadOku: "Muat Naik Kad OKU (Imej/PDF)",
+        estimatedPrice: "Anggaran Harga",
+        total: "Jumlah:",
+        remarks: "Catatan",
+        remarkPlace: "Permintaan tambahan?",
+        confirmBtn: "SAHKAN TEMPAHAN"
+      },
+      zh: {
+        pageTitle: "Funtasy House Trick Art 预约",
+        visitInfo: "参观详情",
+        selectDate: "选择日期",
+        selectTime: "选择时间段",
+        selectDateFirst: "请先选择日期。",
+        contactInfo: "联络资料",
+        organizer: "主办方 / 团体名称",
+        contactPerson: "联络人姓名",
+        phone: "电话号码",
+        email: "电子邮箱",
+        groupComp: "团队组成",
+        mykadTitle: "大马卡持有者",
+        nonMykadTitle: "非大马卡持有者",
+        adultPriceMy: "成人 (RM15)",
+        child1to5PriceMy: "儿童 1-5岁 (RM10)",
+        childAbove5PriceMy: "儿童 >5岁 (RM15)",
+        okuPriceMy: "残障人士 (RM10)",
+        adultPriceF: "成人 (RM25)",
+        child1to5PriceF: "儿童 1-5岁 (RM20)",
+        childAbove5PriceF: "儿童 >5岁 (RM25)",
+        okuPriceF: "残障人士 (RM20)",
+        verifyTitle: "证明文件",
+        tourGuide: "导游",
+        count: "数量:",
+        uploadLicense: "上传执照 (图片/PDF)",
+        okuCard: "残障人士卡",
+        okuHint: "如选择了残障人士票，请上传证明。",
+        uploadOku: "上传残障人士卡 (图片/PDF)",
+        estimatedPrice: "预计价格",
+        total: "总计:",
+        remarks: "备注",
+        remarkPlace: "任何其他要求？",
+        confirmBtn: "确认预约"
+      }
+    };
+
+    function changeLanguage() {
+      const lang = document.getElementById('lang').value;
+      const t = translations[lang];
+
+      // Translate text content
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) el.textContent = t[key];
+      });
+
+      // Translate placeholders
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (t[key]) el.placeholder = t[key];
+      });
+    }
+
+    // --- 2. TIME SLOT LOGIC ---
+    const visitDateInput = document.getElementById('visitDate');
+    const timeSlotsContainer = document.getElementById('timeSlotsContainer');
+    const selectedTimeInput = document.getElementById('selectedTime');
+
+    function generateTimeSlots() {
+      const slots = [];
+      let startHour = 10;
+      let endHour = 16.30;
+
+      for (let h = startHour; h <= endHour; h++) {
+        slots.push(formatTime(h, 0));
+        if (h < endHour) {
+          slots.push(formatTime(h, 30));
+        }
+      }
+      return slots;
+    }
+
+    function formatTime(h, m) {
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      const displayH = h > 12 ? h - 12 : h;
+      const displayM = m === 0 ? '00' : m;
+      const valH = h < 10 ? '0'+h : h;
+      const valM = m === 0 ? '00' : m;
+      return { 
+        display: `${displayH}:${displayM} ${ampm}`, 
+        value: `${valH}:${valM}` 
+      };
+    }
+
+    visitDateInput.addEventListener('change', function() {
+      if(!this.value) return;
+      
+      timeSlotsContainer.innerHTML = '';
+      const slots = generateTimeSlots();
+
+      slots.forEach(slot => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'time-slot border border-gray-300 rounded py-2 text-sm font-medium hover:bg-green-50 transition';
+        btn.textContent = slot.display;
+        btn.onclick = () => selectTime(btn, slot.value);
+        timeSlotsContainer.appendChild(btn);
+      });
+    });
+
+    function selectTime(btn, value) {
+      document.querySelectorAll('.time-slot').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedTimeInput.value = value;
+    }
+
+    // --- 3. PRICING LOGIC ---
+    const PRICES = {
+      adult_my: 15, adult_foreign: 25,
+      child_my_1to5: 10, child_foreign_1to5: 20,
+      child_my_above5: 15, child_foreign_above5: 25,
+      oku_my: 10, oku_foreign: 20
+    };
+
+    function calculateTotal() {
+      let total = 0;
+      let breakdown = [];
+      
+      for (const [key, price] of Object.entries(PRICES)) {
+        const input = document.querySelector(`input[name="${key}"]`);
+        if (input && input.value > 0) {
+          const qty = parseInt(input.value);
+          const sub = qty * price;
+          total += sub;
+          
+          // Helper to make label slightly readable in breakdown
+          let label = key.toUpperCase(); 
+          if(key.includes('MY')) label = label.replace('_MY', ' (MY)');
+          if(key.includes('FOREIGN')) label = label.replace('_FOREIGN', ' (INTL)');
+          
+          breakdown.push(`${label} x${qty} = RM${sub.toFixed(2)}`);
+        }
+      }
+
+      const summaryEl = document.getElementById('priceSummary');
+      if (total > 0) {
+        summaryEl.classList.remove('hidden');
+        document.getElementById('breakdownList').innerHTML = breakdown.join('<br>');
+        document.getElementById('totalRM').textContent = 'RM' + total.toFixed(2);
+        document.getElementById('total_amount').value = total.toFixed(2);
+        document.getElementById('price_breakdown').value = breakdown.join(' | ');
+      } else {
+        summaryEl.classList.add('hidden');
+      }
+    }
+
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+      input.addEventListener('input', calculateTotal);
+    });
+
+    // --- 4. SUBMIT LOGIC ---
+    document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const form = new FormData(e.target);
+      const date = document.getElementById('visitDate').value;
+      const time = document.getElementById('selectedTime').value;
+      if(!date || !time) {
+        alert("Please select both Date and Time.");
+        return;
+      }
+      form.append('dateTime', `${date} ${time}:00`);
+
+      const msgDiv = document.getElementById('resultMsg');
+      msgDiv.innerHTML = "Processing...";
+      msgDiv.className = "bg-yellow-100 text-yellow-800 p-4 rounded-lg text-center block";
+      msgDiv.classList.remove('hidden');
+
+      try {
+        const res = await fetch('sendemail.php', { method: 'POST', body: form });
+        const text = await res.text();
+        
+        if(text.includes('success')) {
+            msgDiv.className = "bg-green-100 text-green-800 p-4 rounded-lg text-center block";
+            msgDiv.textContent = "Booking Successful! Confirmation sent.";
+            document.getElementById('bookingForm').reset();
+            document.getElementById('timeSlotsContainer').innerHTML = '';
+            document.getElementById('priceSummary').classList.add('hidden');
+        } else {
+            throw new Error(text);
+        }
+      } catch (err) {
+        msgDiv.className = "bg-red-100 text-red-800 p-4 rounded-lg text-center block";
+        msgDiv.textContent = "Error submitting booking. Please try again.";
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>
